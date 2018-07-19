@@ -308,7 +308,12 @@ module.exports = React.createClass({
 
                 // lazy load members if enabled
                 if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
-                    MatrixClientPeg.get().loadRoomMembersIfNeeded(room.roomId);
+                    MatrixClientPeg.get().loadRoomMembersIfNeeded(room.roomId).catch((err) => {
+                        const errorMessage = `Fetching room members for ${this.roomId} failed.` +
+                            " Room members will appear incomplete.";
+                        console.error(errorMessage);
+                        console.error(err);
+                    });
                 }
             }
         }
